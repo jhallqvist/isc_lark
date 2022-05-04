@@ -1,0 +1,7 @@
+start: clauses+
+
+?clauses: acl__start
+
+%import .acl.start -> acl__start
+%import common.WS
+%ignore WS

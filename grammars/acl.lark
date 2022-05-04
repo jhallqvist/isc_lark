@@ -1,0 +1,8 @@
+start: "acl" name "{" aml__start "}" ";"
+
+name: QUOTED_STRING
+
+%import .aml.start -> aml__start
+%import .isc_terminals (QUOTED_STRING)
+%import common.WS
+%ignore WS
