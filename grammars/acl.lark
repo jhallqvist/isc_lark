@@ -1,4 +1,6 @@
-start: "acl" name "{" aml__start "}" ";"
+start: acl+
+
+acl: "acl" name "{" aml__start "}" ";"
 
 name: QUOTED_STRING
 

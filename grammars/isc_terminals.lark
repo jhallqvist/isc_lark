@@ -28,8 +28,10 @@ IP_PREFIX: ( IPV4_PREFIX | IPV6_PREFIX )
 REGULAR_WORD: ( WORD | DIGIT | "_" )+
 QUOTED_STRING: /("[^"]*?"|'[^']*?')/
 KEY_ID: "key" WS* REGULAR_WORD
+BOOLEAN: ( "true" | "false "| "1" | "0" | "yes" | "no" )
 
 NEGATED: "!"
+WILDCARD: "*"
 AML_PREDEFINED: ("none" | "any" | "localhost" | "localnets")
 LEFT_BRACE: "{"
 RIGHT_BRACE: "}"

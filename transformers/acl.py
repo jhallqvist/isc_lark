@@ -4,6 +4,9 @@ from .aml import AmlTransformer
 class AclBaseTransformer(Transformer):
 
     def start(self, items):
+        return {"acls": items}
+
+    def acl(self, items):
         return {"name": items[0], "entries": items[1]}
 
     def name(self, items):

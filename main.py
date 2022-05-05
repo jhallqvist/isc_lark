@@ -2,6 +2,7 @@ from pathlib import Path
 from lark import Lark
 from lark.visitors import Transformer, merge_transformers
 from transformers.acl import AclTransformer
+from transformers.controls import ControlsTransformer
 from pprinter import Formatter
 
 __dir__ = Path(__file__).parent
@@ -9,11 +10,19 @@ pprint = Formatter()
 
 class Storage(Transformer):
     def start(self, children):
-        return children
+        result = {}
+        for child in children:
+            key, value = list(child.items())[0]
+            if key in result.keys():
+                result[key].append(value[0])
+            else:
+                result[key] = value
+        return result
 
 main_transformer = merge_transformers(
                             Storage(),
-                            acl=AclTransformer())
+                            acl=AclTransformer(),
+                            controls=ControlsTransformer())
 
 
 text = '''
@@ -31,6 +40,8 @@ acl "test" {
     };
 };
 acl "test2" { 4.4.4.4; };
+controls {};
+acl "test3" { 4.4.4.4; };
 '''
 
 

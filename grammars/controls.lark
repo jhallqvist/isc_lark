@@ -1,0 +1,19 @@
+start: "controls" "{" "}" ";"
+
+inet: "inet" ip_addr (port)? allow (keys)? (read_only)? ";"
+ip_addr: IP_ADDR | WILDCARD
+port: "port" UINT16
+allow: "allow" "{" aml__start "}"
+keys: "keys" "{" aml__start "}"
+read_only: "read-only" BOOLEAN
+
+//unix: "unix" path perm owner group ("keys" "{" aml__start "}")? (read_only)? ";"
+//path: 
+//perm: 
+//owner: 
+//group: 
+
+%import .aml.start -> aml__start
+%import .isc_terminals (IP_ADDR, WILDCARD, UINT16, BOOLEAN)
+%import common.WS
+%ignore WS
