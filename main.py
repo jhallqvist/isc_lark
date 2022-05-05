@@ -10,14 +10,15 @@ pprint = Formatter()
 
 class Storage(Transformer):
     def start(self, children):
-        result = {}
-        for child in children:
-            key, value = list(child.items())[0]
-            if key in result.keys():
-                result[key].append(value[0])
-            else:
-                result[key] = value
-        return result
+        # result = {}
+        # for child in children:
+        #     key, value = list(child.items())[0]
+        #     if key in result.keys():
+        #         result[key].append(value[0])
+        #     else:
+        #         result[key] = value
+        # return result
+        return children
 
 main_transformer = merge_transformers(
                             Storage(),
@@ -40,7 +41,11 @@ acl "test" {
     };
 };
 acl "test2" { 4.4.4.4; };
-controls {};
+controls {
+    inet 1.1.1.1 port 56 allow { 1.1.1.1; } keys {"myKey";} read-only true;
+    inet * allow {};
+    unix "/etc/socket" 0773 10 20keys {"myKey";} read-only no;
+};
 acl "test3" { 4.4.4.4; };
 '''
 
