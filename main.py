@@ -6,6 +6,8 @@ from transformers.controls import ControlsTransformer
 from transformers.include import IncludeTransformer
 from transformers.key import KeyTransformer
 from transformers.logging import LoggingTransformer
+from transformers.parental_agents import ParentalAgentsTransformer
+from transformers.dscpsocketlist import DscpSocketTransformer
 from pprinter import Formatter
 
 __dir__ = Path(__file__).parent
@@ -13,14 +15,14 @@ pprint = Formatter()
 
 class Storage(Transformer):
     def start(self, children):
-        # result = {}
-        # for child in children:
-        #     key, value = list(child.items())[0]
-        #     if key in result.keys():
-        #         result[key].extend(value)
-        #     else:
-        #         result[key] = value
-        # return result
+        result = {}
+        for child in children:
+            key, value = list(child.items())[0]
+            if key in result.keys():
+                result[key].extend(value)
+            else:
+                result[key] = value
+        return result
         return children
 
 main_transformer = merge_transformers(
@@ -29,7 +31,10 @@ main_transformer = merge_transformers(
                             controls=ControlsTransformer(),
                             include=IncludeTransformer(),
                             key=KeyTransformer(),
-                            logging=LoggingTransformer())
+                            logging=LoggingTransformer(),
+                            parental_agents=ParentalAgentsTransformer(),
+                            dscpsocketlist=DscpSocketTransformer()
+                            )
 
 
 text = '''
@@ -79,6 +84,16 @@ logging {
         syslog kern;
     };
 };
+parental-agents "Test" port 49153 dscp 33 {
+    "MyMaster-list";
+    1.1.1.1 port 798;
+    2001::1 key myKey tls myTls;
+};
+parental-agents "Test2" port 49153 dscp 33 {
+    "MyMaster-list";
+    1.1.1.1 port 798;
+    2001::1 key myKey tls myTls;
+};
 '''
 
 
@@ -89,6 +104,5 @@ tree = parser.parse(text)
 print(tree.pretty())
 
 transformed_tree = main_transformer.transform(tree)
-# transformed_tree = AclTransformer().transform(tree)
 
 print(pprint(transformed_tree))

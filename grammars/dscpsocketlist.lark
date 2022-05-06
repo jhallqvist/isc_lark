@@ -1,0 +1,24 @@
+start: clause+
+
+clause: clause_type name (port)? (dscp)? "{" rsl "}" ";"
+
+clause_type: CLAUSE_TYPE
+name: QUOTED_STRING
+port: "port" UINT16
+dscp: "dscp" DSCP
+
+rsl: (element ";")*
+
+element: ip_addr (port)? (key_id)? (tls_id)?
+        | name
+
+ip_addr: IP_ADDR
+key_id: "key" REGULAR_WORD
+tls_id: "tls" REGULAR_WORD
+
+CLAUSE_TYPE: "parental-agents" | "masters" | "primaries"
+
+%import .isc_terminals (REGULAR_WORD)
+%import .isc_terminals (QUOTED_STRING, DSCP, UINT16, IP_ADDR)
+%import common.WS
+%ignore WS

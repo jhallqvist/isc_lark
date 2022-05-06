@@ -5,11 +5,13 @@ start: clauses+
         | include__start
         | key__start
         | logging__start
+        | dscpsocketlist__start
 
 %import .acl.start -> acl__start
 %import .controls.start -> controls__start
 %import .include.start -> include__start
 %import .key.start -> key__start
 %import .logging.start -> logging__start
+%import .dscpsocketlist.start -> dscpsocketlist__start
 %import common.WS
 %ignore WS

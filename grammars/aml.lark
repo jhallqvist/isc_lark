@@ -1,4 +1,4 @@
-start: [element ";" (element ";")*]
+start: (element ";")*
 
 ?element: ip_prefix
         | ip_addr
@@ -17,3 +17,6 @@ list: [NEGATED] "{" start "}"
 %import .isc_terminals (QUOTED_STRING, IP_ADDR, IP_PREFIX, KEY_ID, NEGATED, AML_PREDEFINED)
 %import common.WS
 %ignore WS
+
+
+// old start: [element ";" (element ";")*]
