@@ -1,0 +1,15 @@
+start: key+
+
+key: "key" name "{" attrs ~ 2 "}" ";"
+
+name: QUOTED_STRING
+?attrs: algorithm ";" | secret ";"
+algorithm: "algorithm" ALGORITHMS
+secret: "secret" SECRET
+
+ALGORITHMS: /(hmac-md5|hmac-sha1|hmac-sha224|hmac-sha256|hmac-sha384|hmac-sha512)(-[\d\w]+)?/
+SECRET: QUOTED_STRING
+
+%import .isc_terminals (QUOTED_STRING)
+%import common.WS
+%ignore WS

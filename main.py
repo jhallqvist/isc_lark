@@ -3,6 +3,8 @@ from lark import Lark
 from lark.visitors import Transformer, merge_transformers
 from transformers.acl import AclTransformer
 from transformers.controls import ControlsTransformer
+from transformers.include import IncludeTransformer
+from transformers.key import KeyTransformer
 from pprinter import Formatter
 
 __dir__ = Path(__file__).parent
@@ -14,7 +16,7 @@ class Storage(Transformer):
         # for child in children:
         #     key, value = list(child.items())[0]
         #     if key in result.keys():
-        #         result[key].append(value[0])
+        #         result[key].extend(value)
         #     else:
         #         result[key] = value
         # return result
@@ -23,7 +25,9 @@ class Storage(Transformer):
 main_transformer = merge_transformers(
                             Storage(),
                             acl=AclTransformer(),
-                            controls=ControlsTransformer())
+                            controls=ControlsTransformer(),
+                            include=IncludeTransformer(),
+                            key=KeyTransformer())
 
 
 text = '''
@@ -47,6 +51,16 @@ controls {
     unix "/etc/socket" 0773 10 20keys {"myKey";} read-only no;
 };
 acl "test3" { 4.4.4.4; };
+acl "test4" { 4.4.4.4; };
+include "/home/includes/file.txt";
+key "secret" {
+    algorithm hmac-md5;
+    secret "SUperSecerte";
+};
+key "secret2" {
+    algorithm hmac-md5;
+    secret "SUperSecerte";
+};
 '''
 
 

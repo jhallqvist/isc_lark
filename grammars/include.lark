@@ -1,0 +1,7 @@
+start: "include" file ";"
+
+file: QUOTED_STRING
+
+%import .isc_terminals (QUOTED_STRING)
+%import common.WS
+%ignore WS

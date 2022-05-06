@@ -1,10 +1,6 @@
 from lark.visitors import Transformer, merge_transformers
 from .aml import AmlTransformer
 
-class InetTransformer(Transformer):
-    pass
-
-
 class ControlsBaseTransformer(Transformer):
     
     def start(self, items):
