@@ -1,0 +1,45 @@
+start: "logging" "{" (attrs)* "}" ";"
+
+?attrs: category | channel
+
+category: "category" category_name "{" category_list "}" ";"
+category_name: REGULAR_WORD
+category_list: (element ";")*
+element: REGULAR_WORD
+
+channel: "channel" channel_name "{" (channel_attrs ";")* "}" ";"
+channel_name: REGULAR_WORD
+?channel_attrs: buffered
+              | file
+              | null
+              | print_category
+              | print_severity
+              | print_time
+              | severity
+              | stderr
+              | syslog
+
+buffered:       "buffered" BOOLEAN
+file:           "file" file_name (file_versions)? (file_size)? (file_suffix)?
+file_name:      QUOTED_STRING
+file_versions:  "versions" INT_OR_UNLIMITED
+file_size:      "size" SIZE_UNIT
+file_suffix:    "suffix" SUFFIX
+null:           "null"
+print_category: "print-category" BOOLEAN
+print_severity: "print-severity" BOOLEAN
+print_time:     "print-time" PRINT_VALUE
+severity:       "severity" SYSLOG_SEVERITY
+stderr:         "stderr"
+syslog:         "syslog" SYSLOG_FACILITY
+
+
+SIZE_UNIT: DIGIT+ ( "K" | "k" | "M" | "m" | "G" | "g" )?
+SUFFIX: ( "increment" | "timestamp")
+PRINT_VALUE: ( "iso8601" | "iso8601-utc" | "local" | BOOLEAN )
+SYSLOG_SEVERITY: /(critical|error|warning|notice|info|dynamic)|debug( \d)?/
+SYSLOG_FACILITY: /(kern|user|mail|daemon|auth|syslog|lpr|news|uucp|cron|authpriv|ftp|local0|local1|local2|local3|local4|local5|local6|local7)/
+
+%import .isc_terminals (QUOTED_STRING, REGULAR_WORD, BOOLEAN, INT_OR_UNLIMITED)
+%import common (WS, DIGIT)
+%ignore WS

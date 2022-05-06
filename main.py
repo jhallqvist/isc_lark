@@ -5,6 +5,7 @@ from transformers.acl import AclTransformer
 from transformers.controls import ControlsTransformer
 from transformers.include import IncludeTransformer
 from transformers.key import KeyTransformer
+from transformers.logging import LoggingTransformer
 from pprinter import Formatter
 
 __dir__ = Path(__file__).parent
@@ -27,7 +28,8 @@ main_transformer = merge_transformers(
                             acl=AclTransformer(),
                             controls=ControlsTransformer(),
                             include=IncludeTransformer(),
-                            key=KeyTransformer())
+                            key=KeyTransformer(),
+                            logging=LoggingTransformer())
 
 
 text = '''
@@ -60,6 +62,22 @@ key "secret" {
 key "secret2" {
     algorithm hmac-md5;
     secret "SUperSecerte";
+};
+logging {
+    category myCat {
+        abc;
+    };
+    channel myChan {
+        buffered true;
+        file "myFile" suffix timestamp;
+        null;
+        print-category true;
+        print-severity false;
+        print-time iso8601;
+        severity debug 3;
+        stderr;
+        syslog kern;
+    };
 };
 '''
 

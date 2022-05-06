@@ -1,9 +1,9 @@
 start: key+
 
-key: "key" name "{" attrs ~ 2 "}" ";"
+key: "key" name "{" (attrs ";")* "}" ";"
 
 name: QUOTED_STRING
-?attrs: algorithm ";" | secret ";"
+?attrs: algorithm | secret
 algorithm: "algorithm" ALGORITHMS
 secret: "secret" SECRET
 

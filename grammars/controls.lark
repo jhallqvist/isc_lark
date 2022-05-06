@@ -1,4 +1,6 @@
-start: "controls" "{" ( inet | unix )* "}" ";"
+start: "controls" "{" ( attrs )* "}" ";"
+
+?attrs: inet | unix
 
 inet: channel ip_addr port allow keys read_only ";"
 channel: CHANNEL
