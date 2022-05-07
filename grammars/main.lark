@@ -6,6 +6,7 @@ start: clauses+
         | key__start
         | logging__start
         | dscpsocketlist__start
+        | options
 
 %import .acl.start -> acl__start
 %import .controls.start -> controls__start
@@ -13,5 +14,6 @@ start: clauses+
 %import .key.start -> key__start
 %import .logging.start -> logging__start
 %import .dscpsocketlist.start -> dscpsocketlist__start
+%import .options.start -> options
 %import common.WS
 %ignore WS

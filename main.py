@@ -1,40 +1,10 @@
 from pathlib import Path
 from lark import Lark
-from lark.visitors import Transformer, merge_transformers
-from transformers.acl import AclTransformer
-from transformers.controls import ControlsTransformer
-from transformers.include import IncludeTransformer
-from transformers.key import KeyTransformer
-from transformers.logging import LoggingTransformer
-from transformers.parental_agents import ParentalAgentsTransformer
-from transformers.dscpsocketlist import DscpSocketTransformer
+from transformers.main import main_transformer
 from pprinter import Formatter
 
 __dir__ = Path(__file__).parent
 pprint = Formatter()
-
-class Storage(Transformer):
-    def start(self, children):
-        result = {}
-        for child in children:
-            key, value = list(child.items())[0]
-            if key in result.keys():
-                result[key].extend(value)
-            else:
-                result[key] = value
-        return result
-        return children
-
-main_transformer = merge_transformers(
-                            Storage(),
-                            acl=AclTransformer(),
-                            controls=ControlsTransformer(),
-                            include=IncludeTransformer(),
-                            key=KeyTransformer(),
-                            logging=LoggingTransformer(),
-                            parental_agents=ParentalAgentsTransformer(),
-                            dscpsocketlist=DscpSocketTransformer()
-                            )
 
 
 text = '''
@@ -94,8 +64,24 @@ parental-agents "Test2" port 49153 dscp 33 {
     1.1.1.1 port 798;
     2001::1 key myKey tls myTls;
 };
+options {
+    allow-new-zones 1;
+    allow-notify { 1.1.1.1; };
+};
 '''
 
+text = '''
+options {
+    allow-new-zones 1;
+    allow-notify { 1.1.1.1; };
+    allow-recursion { "mytestList"; };
+    also-notify "Test2" port 49153 dscp 33 {
+        "MyMaster-list";
+        1.1.1.1 port 798;
+        2001::1 key myKey tls myTls;
+    };
+};
+'''
 
 parser = Lark.open(__dir__ / 'grammars/main.lark')
 
