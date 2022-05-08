@@ -1,0 +1,22 @@
+start: (element ";")*
+
+?element: ip_prefix
+        | ip_addr
+        | acl
+        | key
+        | predefined
+        | list
+
+ip_prefix: [NEGATED] IP_PREFIX
+ip_addr: [NEGATED] IP_ADDR
+acl: [NEGATED] QUOTED_STRING
+key: [NEGATED] KEY_ID
+predefined: [NEGATED] AML_PREDEFINED
+list: [NEGATED] "{" start "}"
+
+%import .isc_terminals (QUOTED_STRING, IP_ADDR, IP_PREFIX, KEY_ID, NEGATED, AML_PREDEFINED)
+%import common.WS
+%ignore WS
+
+
+// old start: [element ";" (element ";")*]

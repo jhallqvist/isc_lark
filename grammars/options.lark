@@ -1,38 +1,49 @@
 start: "options" "{" ( attrs )* "}" ";"
 
 ?attrs: key_bool
+      | key_str
+      | key_quoted_str
       | key_aml
+      | allow_transfer
       | also_notify
+      | socketaddr6wild
+      | socketaddr4wild
+      | port_stmts
+      | auto_dnssec
+      | catalog_zones
 
 // To reduce code similar statements will utilize a combined rule and terminal.
 // These will be gathered below this comment.
 key_bool: KEY_BOOL BOOLEAN ";"
-key_aml: KEY_AML "{" aml__start "}" ";"
+key_str: KEY_STR REGULAR_WORD ";"
+key_quoted_str: KEY_QUOTED_STR QUOTED_STRING ";"
+key_aml: KEY_AML "{" shared_aml__start "}" ";"
+socketaddr6wild: shared_sockaddr6wild__start
+socketaddr4wild: shared_sockaddr4wild__start
+
+port_stmts: PORT_STMTS "{" (port_element ";")* "}" ";"
+?port_element: portrange | port
+portrange: "range" UINT16 UINT16
+port: UINT16
+
+allow_transfer: "allow-transfer" (port_tuple)? (transport)? "{" shared_aml__start "}" ";"
+port_tuple: "port" UINT16
+transport: "transport" REGULAR_WORD
+
+also_notify: "also-notify" shared_dscpsocketlist__start ";"
+auto_dnssec: "auto-dnssec" AUTO_DNSEC ";"
+avoid_v4_udp_ports: "avoid-v4-udp-ports"
+
+catalog_zones: "catalog-zones" "{" (catalog_zone ";")* "}" ";"
+catalog_zone: "zone" zone default_rsl zone_directory in_memory min_update_interval
+zone: REGULAR_WORD
+default_rsl: CAT_ZONE_DEFAULT shared_dscpsocketlist__start
+zone_directory: "zone-directory" QUOTED_STRING
+in_memory: "in-memory" BOOLEAN
+min_update_interval: "min-update-interval" ( ISO_8601 | TTL )
 
 
-
-
-//allow_transfer:
-also_notify: dscpsocketlist__start
-
-
-
-
-
-
-//alt_transfer_source:
-//alt_transfer_source_v6:
-//answer_cookie:
-//attach_cache:
-//auth_nxdomain:
-//auto_dnssec:
-//automatic_interface_scan:
-//avoid_v4_udp_ports:
-//avoid_v6_udp_ports:
-//bindkeys_file:
-//blackhole:
-//cache_file:
-//catalog_zones:
+//cache_file <- is developer only according to zytrax ....
 //check_dup_records:
 //check_integrity:
 //check_mx:
@@ -152,14 +163,10 @@ also_notify: dscpsocketlist__start
 //notify:
 //notify_delay:
 //notify_rate:
-//notify_source:
-//notify_source_v6:
 //notify_to_soa:
 //nta_lifetime:
 //nta_recheck:
 //nxdomain_redirect:
-//parental_source:
-//parental_source_v6:
 //pid_file:
 //port:
 //preferred_glue:
@@ -225,8 +232,6 @@ also_notify: dscpsocketlist__start
 //tls_port:
 //transfer_format:
 //transfer_message_size:
-//transfer_source:
-//transfer_source_v6:
 //transfers_in:
 //transfers_out:
 //transfers_per_ns:
@@ -245,16 +250,24 @@ also_notify: dscpsocketlist__start
 //zero_no_soa_ttl_cache:
 //zone_statistics:
 
+//name: QUOTED_STRING
 
-KEY_BOOL: "allow-new-zones"
-// The KEY_AML literal is meant to match all statement starts with a word representing the key 
-// and immediately follows with a addres match list
-KEY_AML: "allow-new-zones" | "allow-notify" | "allow-query" | "allow-query-cache" 
-       | "allow-query-cache" | "allow-query-on" | "allow-recursion" | "allow-recursion-on" 
-       | "allow-update" | "allow-update-forwarding"
 
-%import .aml.start -> aml__start
-%import .dscpsocketlist.start -> dscpsocketlist__start
-%import .isc_terminals (BOOLEAN)
+AUTO_DNSEC: "allow" | "maintain" | "off"
+CAT_ZONE_DEFAULT: "default-primaries" | "default-masters"
+
+PORT_STMTS: "avoid-v4-udp-ports" | "avoid-v6-udp-ports" | "use-v4-udp-ports" | "use-v6-udp-ports"
+KEY_BOOL: "allow-new-zones" | "answer-cookie" | "auth-nxdomain" | "automatic-interface-scan"
+KEY_STR: "attach-cache"
+KEY_QUOTED_STR: "bindkeys-file"
+KEY_AML: "allow-notify" | "allow-query" | "allow-query-cache" | "allow-query-cache" 
+       | "allow-query-on" | "allow-recursion" | "allow-recursion-on" 
+       | "allow-update" | "allow-update-forwarding" | "blackhole"
+
+%import .shared_aml.start -> shared_aml__start
+%import .shared_dscpsocketlist.start -> shared_dscpsocketlist__start
+%import .shared_sockaddr4wild.start -> shared_sockaddr4wild__start
+%import .shared_sockaddr6wild.start -> shared_sockaddr6wild__start
+%import .isc_terminals (BOOLEAN, REGULAR_WORD, UINT16, QUOTED_STRING, ISO_8601, TTL)
 %import common.WS
 %ignore WS

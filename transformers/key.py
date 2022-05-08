@@ -3,10 +3,11 @@ from lark import Transformer
 class KeyTransformer(Transformer):
 
     def start(self, items):
-        return {"keys": items}
+        values = {k: v for d in items for k, v in d.items()}
+        return {"keys": [values]}
 
-    def key(self, items):
-        return {k: v for d in items for k, v in d.items()}
+    # def key(self, items):
+    #     return {k: v for d in items for k, v in d.items()}
 
     def name(self, items):
         return {"name": items[0].value}

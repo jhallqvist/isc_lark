@@ -26,13 +26,15 @@ IPV6_PREFIX: IPV6_ADDR "/" IPV6_CIDR
 IP_ADDR: ( IP4_ADDR | IPV6_ADDR )
 IP_PREFIX: ( IPV4_PREFIX | IPV6_PREFIX )
 
-REGULAR_WORD: ( WORD | DIGIT | "_" )+
+REGULAR_WORD: ( WORD | DIGIT | "_" | "-" )+
 QUOTED_STRING: /("[^"]*?"|'[^']*?')/
 KEY_ID: "key" WS* REGULAR_WORD
 TLS_ID: "tls" WS* REGULAR_WORD
 BOOLEAN: ( "true" | "false" | "1" | "0" | "yes" | "no" )
 INT_OR_UNLIMITED: ( UINT32 | "unlimited" )
 DSCP: /(6[0-3]|[1-5][0-9]|[0-9])/
+ISO_8601: REGULAR_WORD
+TTL: DIGIT~ 1..11
 
 NEGATED: "!"
 WILDCARD: "*"

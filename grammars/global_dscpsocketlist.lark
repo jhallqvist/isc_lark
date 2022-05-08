@@ -1,0 +1,11 @@
+start: clause_type name shared_dscpsocketlist__start ";"
+
+clause_type: CLAUSE_TYPE
+name: QUOTED_STRING
+
+CLAUSE_TYPE: "parental-agents" | "masters" | "primaries"
+
+%import .shared_dscpsocketlist.start -> shared_dscpsocketlist__start
+%import .isc_terminals (QUOTED_STRING)
+%import common.WS
+%ignore WS

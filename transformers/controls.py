@@ -1,5 +1,6 @@
+from unittest import result
 from lark.visitors import Transformer, merge_transformers
-from .aml import AmlTransformer
+from .shared_aml import AmlTransformer
 
 class ControlsBaseTransformer(Transformer):
     
@@ -7,10 +8,9 @@ class ControlsBaseTransformer(Transformer):
         return {"controls": items}
 
     def inet(self, items):
-        return {k: v for d in items for k, v in d.items()}
-
-    def channel(self, items):
-        return {"channel": items[0].value}
+        result_dict ={"channel": "inet"}
+        result_dict.update({k: v for d in items for k, v in d.items()})
+        return result_dict
 
     def ip_addr(self, items):
         return {"ip-address": items[0].value}
@@ -24,7 +24,9 @@ class ControlsBaseTransformer(Transformer):
         return {"allow": items[0]}
 
     def unix(self, items):
-        return {k: v for d in items for k, v in d.items()}
+        result_dict ={"channel": "unix"}
+        result_dict.update({k: v for d in items for k, v in d.items()})
+        return result_dict
 
     def path(self, items):
         return {"path": items[0].value}
@@ -55,4 +57,4 @@ class ControlsBaseTransformer(Transformer):
 
 ControlsTransformer = merge_transformers(
                             ControlsBaseTransformer,
-                            aml=AmlTransformer())
+                            shared_aml=AmlTransformer())

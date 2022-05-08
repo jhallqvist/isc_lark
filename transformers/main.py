@@ -1,21 +1,23 @@
 from lark.visitors import Transformer, merge_transformers
-from transformers.acl import AclTransformer
-from transformers.controls import ControlsTransformer
-from transformers.include import IncludeTransformer
-from transformers.key import KeyTransformer
-from transformers.logging import LoggingTransformer
-from transformers.dscpsocketlist import DscpSocketTransformer
+from .acl import AclTransformer
+from .controls import ControlsTransformer
+from .include import IncludeTransformer
+from .key import KeyTransformer
+from .logging import LoggingTransformer
+from .options import OptionsTransformer
+from .global_dscpsocketlist import GlobalDscpSocketTransformer
+
 
 class Storage(Transformer):
     def start(self, children):
-        # result = {}
-        # for child in children:
-        #     key, value = list(child.items())[0]
-        #     if key in result.keys():
-        #         result[key].extend(value)
-        #     else:
-        #         result[key] = value
-        # return result
+    #     result = {}
+    #     for child in children:
+    #         key, value = list(child.items())[0]
+    #         if key in result.keys():
+    #             result[key].extend(value)
+    #         else:
+    #             result[key] = value
+    #     return result
         return children
 
 main_transformer = merge_transformers(
@@ -25,5 +27,6 @@ main_transformer = merge_transformers(
                             include=IncludeTransformer(),
                             key=KeyTransformer(),
                             logging=LoggingTransformer(),
-                            dscpsocketlist=DscpSocketTransformer()
+                            options=OptionsTransformer(),
+                            global_dscpsocketlist=GlobalDscpSocketTransformer()
                             )

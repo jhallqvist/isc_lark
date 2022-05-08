@@ -3,15 +3,15 @@ from lark import Transformer
 class DscpSocketTransformer(Transformer):
 
     def start(self, items):
-        return items[0]
+        return items
 
-    def clause(self, items):
-        clause, *values = items
-        values_dict = {k: v for d in values for k, v in d.items()}
-        return {clause: [values_dict]}
+    # def clause(self, items):
+    #     clause, *values = items
+    #     values_dict = {k: v for d in values for k, v in d.items()}
+    #     return {clause: [values_dict]}
 
-    def clause_type(self, items):
-        return items[0].value
+    # def clause_type(self, items):
+    #     return items[0].value
 
     def name(self, items):
         return {"name": items[0].value}

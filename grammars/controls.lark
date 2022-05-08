@@ -2,24 +2,22 @@ start: "controls" "{" ( attrs )* "}" ";"
 
 ?attrs: inet | unix
 
-inet: channel ip_addr (port)? allow (keys)? (read_only)? ";"
-channel: CHANNEL
+inet: "inet" ip_addr (port)? allow (keys)? (read_only)? ";"
 ip_addr: IP_ADDR | WILDCARD
 port: "port" UINT16
-allow: "allow" "{" aml__start "}"
-keys: "keys" "{" aml__start "}"
+allow: "allow" "{" shared_aml__start "}"
+keys: "keys" "{" shared_aml__start "}"
 read_only: "read-only" BOOLEAN
 
-unix: channel path perm owner group keys read_only ";"
+unix: "unix" path perm owner group keys read_only ";"
 path: QUOTED_STRING
 perm: PERM
 owner: UINT32
 group: UINT32
 
-CHANNEL: ( "inet" | "unix" )
 PERM: OCTAL ~ 3..4
 
-%import .aml.start -> aml__start
+%import .shared_aml.start -> shared_aml__start
 %import .isc_terminals (IP_ADDR, WILDCARD, UINT16, BOOLEAN, QUOTED_STRING, OCTAL, UINT32)
 %import common.WS
 %ignore WS

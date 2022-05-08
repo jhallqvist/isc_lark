@@ -44,7 +44,7 @@ logging {
     };
     channel myChan {
         buffered true;
-        file "myFile" suffix timestamp;
+        file "myFile" versions unlimited  size 3M suffix timestamp;
         null;
         print-category true;
         print-severity false;
@@ -74,11 +74,35 @@ text = '''
 options {
     allow-new-zones 1;
     allow-notify { 1.1.1.1; };
-    allow-recursion { "mytestList"; };
-    also-notify "Test2" port 49153 dscp 33 {
+    alt-transfer-source * port 33 dscp 62;
+    allow-transfer port 49152 transport tls { 1.1.1.1; };
+    also-notify port 798 dscp 33 {
         "MyMaster-list";
         1.1.1.1 port 798;
         2001::1 key myKey tls myTls;
+    };
+    alt-transfer-source 1.1.1.1 port * dscp 32;
+    alt-transfer-source-v6 2001::1 port 666 dscp 43;
+    answer-cookie no;
+    attach-cache A;
+    auth-nxdomain true;
+    auto-dnssec allow;
+    automatic-interface-scan 0;
+    avoid-v4-udp-ports { 5000; range 1024 2048; };
+    avoid-v6-udp-ports { 40000; range 50000 60000; };
+    bindkeys-file "myTestFile";
+    blackhole { 8.8.8.8; 8.8.4.4; };
+    catalog-zones { 
+        zone test
+        default-masters port 798 dscp 33 {
+            "MyMaster-list";
+            1.1.1.1 port 798;
+            2001::1 key myKey tls myTls;
+        }
+        zone-directory "myZone"
+        in-memory false
+        min-update-interval 1234
+        ;
     };
 };
 '''

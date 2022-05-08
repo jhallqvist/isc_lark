@@ -1,6 +1,4 @@
-start: key+
-
-key: "key" name "{" (attrs ";")* "}" ";"
+start: "key" name "{" (attrs ";")* "}" ";"
 
 name: QUOTED_STRING
 ?attrs: algorithm | secret

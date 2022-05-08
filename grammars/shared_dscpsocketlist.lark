@@ -2,11 +2,9 @@
 // it means the clauses specified in the below CLAUSE_TYPE literal that only really differs in the 
 // first word in the clause
 
-start: clause+
+start: (port)? (dscp)? "{" rsl "}"
 
-clause: clause_type name (port)? (dscp)? "{" rsl "}" ";"
-
-clause_type: CLAUSE_TYPE
+//clause_type: CLAUSE_TYPE
 name: QUOTED_STRING
 port: "port" UINT16
 dscp: "dscp" DSCP
@@ -20,7 +18,7 @@ ip_addr: IP_ADDR
 key_id: "key" REGULAR_WORD
 tls_id: "tls" REGULAR_WORD
 
-CLAUSE_TYPE: "parental-agents" | "masters" | "primaries" | "also-notify"
+// CLAUSE_TYPE: "parental-agents" | "masters" | "primaries" | "also-notify"
 
 %import .isc_terminals (REGULAR_WORD)
 %import .isc_terminals (QUOTED_STRING, DSCP, UINT16, IP_ADDR)

@@ -1,10 +1,10 @@
-start: acl+
+start: acl
 
-acl: "acl" name "{" aml__start "}" ";"
+acl: "acl" name "{" shared_aml__start "}" ";"
 
 name: QUOTED_STRING
 
-%import .aml.start -> aml__start
+%import .shared_aml.start -> shared_aml__start
 %import .isc_terminals (QUOTED_STRING)
 %import common.WS
 %ignore WS

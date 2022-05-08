@@ -2,6 +2,9 @@ from lark import Transformer
 
 class AmlTransformer(Transformer):
 
+    def start(self, items):
+        return items
+
     def ip_prefix(self, items):
         if None in items:
             items.remove(None)
@@ -35,6 +38,3 @@ class AmlTransformer(Transformer):
         for item in items:
             result["entries"].append(item)
         return result
-
-    def start(self, items):
-        return list(items)

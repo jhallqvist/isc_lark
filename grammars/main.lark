@@ -5,15 +5,15 @@ start: clauses+
         | include__start
         | key__start
         | logging__start
-        | dscpsocketlist__start
-        | options
+        | global_dscpsocketlist__start
+        | options__start
 
 %import .acl.start -> acl__start
 %import .controls.start -> controls__start
 %import .include.start -> include__start
 %import .key.start -> key__start
 %import .logging.start -> logging__start
-%import .dscpsocketlist.start -> dscpsocketlist__start
-%import .options.start -> options
+%import .global_dscpsocketlist.start -> global_dscpsocketlist__start
+%import .options.start -> options__start
 %import common.WS
 %ignore WS

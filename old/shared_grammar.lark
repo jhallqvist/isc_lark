@@ -1,0 +1,33 @@
+// for alt-transfer-source, notify-source, parental-source, transfer-source statements
+
+sockaddr4wild: clause_type ip_addr (port)? (dscp)?";"
+
+clause_type: SOCKADDR4WILD_TYPE
+ip_addr: IP4_ADDR | WILDCARD
+port: "port" ( UINT16 | WILDCARD )
+dscp: "dscp" DSCP
+
+SOCKADDR4WILD_TYPE: "alt-transfer-source" | "notify-source" | "parental-source" | "transfer-source"
+
+// ----------
+
+// for alt-transfer-source-v6, notify-source-v6, parental-source-v6, transfer-source-v6 statements
+
+sockaddr6wild: clause_type ip_addr (port)? (dscp)?";"
+
+clause_type: SOCKADDR6WILD_TYPE
+ip_addr: IP6_ADDR | WILDCARD
+port: "port" ( UINT16 | WILDCARD )
+dscp: "dscp" DSCP
+
+SOCKADDR6WILD: "alt-transfer-source" | "notify-source" | "parental-source" | "transfer-source"
+
+// ----------
+
+
+
+
+
+%import .isc_terminals (QUOTED_STRING, DSCP, UINT16, IP4_ADDR, IP6_ADDR, WILDCARD)
+%import common.WS
+%ignore WS
