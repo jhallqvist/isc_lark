@@ -34,12 +34,12 @@ stderr:         "stderr"
 syslog:         "syslog" SYSLOG_FACILITY
 
 
-SIZE_UNIT: DIGIT+ ( "K" | "k" | "M" | "m" | "G" | "g" )?
+//SIZE_UNIT: DIGIT~10 ( "K" | "k" | "M" | "m" | "G" | "g" )?
 SUFFIX: ( "increment" | "timestamp")
 PRINT_VALUE: ( "iso8601" | "iso8601-utc" | "local" | BOOLEAN )
 SYSLOG_SEVERITY: /(critical|error|warning|notice|info|dynamic)|debug( \d)?/
 SYSLOG_FACILITY: /(kern|user|mail|daemon|auth|syslog|lpr|news|uucp|cron|authpriv|ftp|local0|local1|local2|local3|local4|local5|local6|local7)/
 
-%import .isc_terminals (QUOTED_STRING, REGULAR_WORD, BOOLEAN, INT_OR_UNLIMITED)
+%import .isc_terminals (QUOTED_STRING, REGULAR_WORD, BOOLEAN, INT_OR_UNLIMITED, SIZE_UNIT)
 %import common (WS, DIGIT)
 %ignore WS

@@ -104,6 +104,23 @@ options {
         min-update-interval 1234
         ;
     };
+    cache-file "/etc/bind/secretfile.file";
+    check-dup-records fail;
+    check-integrity no;
+    check-mx warn;
+    check-mx-cname ignore;
+    check-names slave;
+    check-sibling true;
+    check-spf ignore;
+    check-srv-cname warn;
+    check-wildcard false;
+    clients-per-query 66;
+    cookie-algorithm aes;
+    cookie-secret 0123456789aBcDeF0123;
+    coresize 3G;
+    datasize unlimited;
+    deny-answer-addresses { 8.8.8.8; } except-from { "example.net"; };
+    deny-answer-aliases { "example.net"; } except-from { "example.net"; };
 };
 '''
 

@@ -27,8 +27,29 @@ class OptionsBaseTransformer(Transformer):
         key, value = items
         return {str(key): str(value)}
 
+    def key_size(self, items):
+        key, value = items
+        return {str(key): str(value)}
+
+    def key_check(self, items):
+        key, value = items
+        return {str(key): str(value)}
+
+    def check_names(self, items):
+        return {"check-names": str(items[0])}
+
+    def check_spf(self, items):
+        return {"check-spf": str(items[0])}
+
     def auto_dnssec (self, items):
         return {"auto-dnssec": str(items[0])}
+
+    def cookie_algorithm(self, items):
+        return {"cookie-algorithm": str(items[0])}
+
+    def key_int(self, items):
+        key, value = items
+        return {str(key): int(value)}
 
     def key_aml(self, items):
         key, values = items
@@ -95,6 +116,29 @@ class OptionsBaseTransformer(Transformer):
     def min_update_interval(self, items):
         return {"min-update-interval": str(items[0])}
 
+    def deny_answer_addresses(self, items):
+        result_dict = {
+            "deny-answer-addresses": {
+                "entries": items[0],
+                "except-from": items[1]
+                }
+            }
+        return result_dict
+
+    def deny_answer_aliases(self, items):
+        result_dict = {
+            "deny-answer-aliases": {
+                "entries": items[0],
+                "except-from": items[1]
+                }
+            }
+        return result_dict
+
+    def deny_except(self, items):
+        return items[0]
+
+    def name_list(self, items):
+        return [str(item) for item in items]
 
 OptionsTransformer = merge_transformers(
                             OptionsBaseTransformer,

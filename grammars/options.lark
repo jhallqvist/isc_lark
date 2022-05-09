@@ -3,6 +3,9 @@ start: "options" "{" ( attrs )* "}" ";"
 ?attrs: key_bool
       | key_str
       | key_quoted_str
+      | key_check
+      | key_int
+      | key_size
       | key_aml
       | allow_transfer
       | also_notify
@@ -11,12 +14,20 @@ start: "options" "{" ( attrs )* "}" ";"
       | port_stmts
       | auto_dnssec
       | catalog_zones
+      | check_names
+      | check_spf
+      | cookie_algorithm
+      | deny_answer_addresses
+      |deny_answer_aliases
 
 // To reduce code similar statements will utilize a combined rule and terminal.
 // These will be gathered below this comment.
 key_bool: KEY_BOOL BOOLEAN ";"
 key_str: KEY_STR REGULAR_WORD ";"
 key_quoted_str: KEY_QUOTED_STR QUOTED_STRING ";"
+key_check: KEY_CHECK KEY_CHECK_VALUE ";"
+key_int: KEY_INT INTEGER ";"
+key_size: KEY_SIZE KEY_SIZE_VALUE ";"
 key_aml: KEY_AML "{" shared_aml__start "}" ";"
 socketaddr6wild: shared_sockaddr6wild__start
 socketaddr4wild: shared_sockaddr4wild__start
@@ -42,24 +53,15 @@ zone_directory: "zone-directory" QUOTED_STRING
 in_memory: "in-memory" BOOLEAN
 min_update_interval: "min-update-interval" ( ISO_8601 | TTL )
 
+check_names: "check-names" CHECK_NAMES_VALUES ";"
+check_spf: "check-spf" CHECK_SPF ";"
+cookie_algorithm: "cookie-algorithm" COOKIE_ALGO_VALUES ";"
+deny_answer_addresses: "deny-answer-addresses" "{" shared_aml__start "}" (deny_except)? ";"
+deny_answer_aliases: "deny-answer-aliases" "{" (name_list ";")* "}" deny_except ";"
+deny_except: "except-from" "{" (name_list ";")* "}"
+name_list: QUOTED_STRING
 
-//cache_file <- is developer only according to zytrax ....
-//check_dup_records:
-//check_integrity:
-//check_mx:
-//check_mx_cname:
-//check_names:
-//check_sibling:
-//check_spf:
-//check_srv_cname:
-//check_wildcard:
-//clients_per_query:
-//cookie_algorithm:
-//cookie_secret:
-//coresize:
-//datasize:
-//deny_answer_addresses:
-//deny_answer_aliases:
+
 //dialup:
 //directory:
 //disable_algorithms:
@@ -250,16 +252,24 @@ min_update_interval: "min-update-interval" ( ISO_8601 | TTL )
 //zero_no_soa_ttl_cache:
 //zone_statistics:
 
-//name: QUOTED_STRING
 
 
 AUTO_DNSEC: "allow" | "maintain" | "off"
 CAT_ZONE_DEFAULT: "default-primaries" | "default-masters"
-
+CHECK_NAMES_VALUES: "primary" | "master" | "secondary" | "slave" | "response" | KEY_CHECK_VALUE
+CHECK_SPF: "warn" | "ignore"
+COOKIE_ALGO_VALUES: "aes" | "siphash24"
 PORT_STMTS: "avoid-v4-udp-ports" | "avoid-v6-udp-ports" | "use-v4-udp-ports" | "use-v6-udp-ports"
-KEY_BOOL: "allow-new-zones" | "answer-cookie" | "auth-nxdomain" | "automatic-interface-scan"
-KEY_STR: "attach-cache"
-KEY_QUOTED_STR: "bindkeys-file"
+
+KEY_BOOL: "allow-new-zones" | "answer-cookie" | "auth-nxdomain" | "automatic-interface-scan" 
+        | "check-integrity" | "check-sibling" | "check-wildcard"
+KEY_STR: "attach-cache" | "cookie-secret"
+KEY_QUOTED_STR: "bindkeys-file" | "cache-file"
+KEY_CHECK: "check-dup-records" | "check-mx" | "check-mx-cname" | "check-srv-cname"
+KEY_CHECK_VALUE: "fail" | "warn" | "ignore"
+KEY_SIZE: "coresize" | "datasize"
+KEY_SIZE_VALUE: "default" | "unlimited" | SIZE_UNIT
+KEY_INT: "clients-per-query"
 KEY_AML: "allow-notify" | "allow-query" | "allow-query-cache" | "allow-query-cache" 
        | "allow-query-on" | "allow-recursion" | "allow-recursion-on" 
        | "allow-update" | "allow-update-forwarding" | "blackhole"
@@ -268,6 +278,6 @@ KEY_AML: "allow-notify" | "allow-query" | "allow-query-cache" | "allow-query-cac
 %import .shared_dscpsocketlist.start -> shared_dscpsocketlist__start
 %import .shared_sockaddr4wild.start -> shared_sockaddr4wild__start
 %import .shared_sockaddr6wild.start -> shared_sockaddr6wild__start
-%import .isc_terminals (BOOLEAN, REGULAR_WORD, UINT16, QUOTED_STRING, ISO_8601, TTL)
+%import .isc_terminals (BOOLEAN, REGULAR_WORD, UINT16, QUOTED_STRING, ISO_8601, TTL, INTEGER, SIZE_UNIT)
 %import common.WS
 %ignore WS
